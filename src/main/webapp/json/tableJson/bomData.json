@@ -1,7 +1,8 @@
 [
   {
-    "items":"1",
-    "ProcedureNumber":"2",
+    "id": "0",
+    "items":"112312312321312312",
+    "ProcedureNumber":"1994-12-21",
     "ProcedureCode":"3",
     "resources":"",
     "resourcesPriority":"",
@@ -23,8 +24,9 @@
     "workingBatchUnit":""
   },
   {
+    "id": "1",
     "items":"1",
-    "ProcedureNumber":"2",
+    "ProcedureNumber":"",
     "ProcedureCode":"3",
     "resources":"",
     "resourcesPriority":"",

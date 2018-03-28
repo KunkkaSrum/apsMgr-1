@@ -1,0 +1,113 @@
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 1800px">
+        <div class="modal-content">
+            <div class="form-inline">
+                <div>
+                    <div class="form-group  ">
+                        <label for="items" class="  control-label">品目</label>
+                        <input type="text" class="form-control" id="items" placeholder="品目">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="ProcedureNumber" class="  control-label">工序编号</label>
+                        <input type="text" class="form-control" id="ProcedureNumber" placeholder="工序编号">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="ProcedureCode" class="  control-label">工序代码</label>
+                        <input type="text" class="form-control" id="ProcedureCode" placeholder="工序代码">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="resources" class="  control-label">资源</label>
+                        <input type="text" class="form-control" id="resources" placeholder="资源">
+
+                    </div>
+                    <div class="form-group  ">
+                        <label for="resourcesPriority" class="  control-label">资源优先度</label>
+                        <input type="text" class="form-control" id="resourcesPriority" placeholder="资源优先度">
+
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group  ">
+                        <label for="frontSet" class="  control-label">前设置</label>
+                        <input type="text" class="form-control" id="frontSet" placeholder="前设置">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="produce" class="  control-label">制造</label>
+                        <input type="text" class="form-control" id="produce" placeholder="制造">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="backSet" class="  control-label">后设置</label>
+                        <input type="text" class="form-control" id="backSet" placeholder="后设置">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="continueMethod" class="  control-label">接续方法</label>
+                        <input type="text" class="form-control" id="continueMethod" placeholder="接续方法">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="necessaryResources" class="  control-label">必要资源量</label>
+                        <input type="text" class="form-control" id="necessaryResources" placeholder="必要资源量">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group  ">
+                        <label for="moveTimeMin" class="  control-label">移动时间min</label>
+                        <input type="text" class="form-control" id="moveTimeMin" placeholder="移动时间min">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="moveTimeMax" class="  control-label">移动时间max</label>
+                        <input type="text" class="form-control" id="moveTimeMax" placeholder="移动时间max">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="wasteNumber" class="  control-label">废品数量</label>
+                        <input type="text" class="form-control" id="wasteNumber" placeholder="废品数量">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="yield" class="  control-label">成品率</label>
+                        <input type="text" class="form-control" id="yield" placeholder="成品率">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="produceEffic" class="  control-label">制造效率</label>
+                        <input type="text" class="form-control" id="produceEffic" placeholder="制造效率">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group  ">
+                        <label for="instructionType" class="  control-label">指令种类</label>
+                        <input type="text" class="form-control" id="instructionType" placeholder="指令种类">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="instructionCode" class="  control-label">指令代码</label>
+                        <input type="text" class="form-control" id="instructionCode" placeholder="指令代码">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="instructionUseful" class="  control-label">指令有效条件</label>
+                        <input type="text" class="form-control" id="instructionUseful" placeholder="指令有效条件">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="workingBatchMin" class="  control-label">工作批量min</label>
+                        <input type="text" class="form-control" id="workingBatchMin" placeholder="工作批量min">
+                    </div>
+                    <div class="form-group  ">
+                        <label for="workingBatchMax" class="  control-label">工作批量max</label>
+                        <input type="text" class="form-control" id="workingBatchMax" placeholder="工作批量max">
+                    </div>
+                </div>
+                <div>
+                    <div class="form-group  ">
+                        <label for="workingBatchUnit" class="  control-label">工作批量单位</label>
+                        <input type="text" class="form-control" id="workingBatchUnit" placeholder="工作批量单位">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2  ">
+                        <button id="modelSave" class="btn btn-primary" data-dismiss="modal" aria-hidden="true"
+                                onclick="insertRow()">保存
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

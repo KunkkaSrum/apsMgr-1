@@ -2722,6 +2722,7 @@ th {
     width: 100%;
     max-width: 100%;
     margin-bottom: 20px
+    table-layout: fixed;
 }
 
 .table > tbody > tr > td, .table > tbody > tr > th, .table > tfoot > tr > td, .table > tfoot > tr > th, .table > thead > tr > td, .table > thead > tr > th {
@@ -6536,7 +6537,7 @@ button.close {
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 1060;
+    z-index: 9999;
     display: none;
     max-width: 276px;
     padding: 1px;
