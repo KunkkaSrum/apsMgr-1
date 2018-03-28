@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="<%=basePath%>css/common.css">
     <link rel="stylesheet" href="<%=basePath%>control/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<%=basePath%>control/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap3-editable/css/bootstrap-editable.css">
 </head>
 <body>
 <div class="container-fluid">
@@ -58,6 +60,11 @@
 <script type="text/javascript" src="<%=basePath%>control/zTree/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/common.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/order.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script type="text/javascript"
+        src="<%=basePath%>control/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
 <script type="text/javascript">
     layui.use('table', function () {
         var table = layui.table;

@@ -221,7 +221,7 @@
             ,type: "post"
             ,data: {bomTable: tableData}
             ,success: function (result) {
-                
+
             }
         })
     }

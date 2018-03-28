@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="<%=basePath%>css/common.css">
     <link rel="stylesheet" href="<%=basePath%>control/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<%=basePath%>control/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap3-editable/css/bootstrap-editable.css">
 </head>
 <body>
 <div class="container-fluid">
@@ -41,10 +43,16 @@
             </div>
         </div>
         <div class="col-md-8" style="padding-left: 5px">
-            <div class="table-btn">
-                <button class="layui-btn" id="tableAdd">新增</button>
-                <button class="layui-btn layui-btn-danger" id="tableDelete">删除</button>
-                <button class="layui-btn">保存</button>
+            <div id="toolbar" class="btn-group">
+                <button id="btn_add" type="button" class="btn btn-default" onclick="insertRow()">
+                    <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+                </button>
+                <button id="btn_delete" type="button" class="btn btn-default" onclick="deleteRow()">
+                    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+                </button>
+                <button id="btn_edit" type="button" class="btn btn-default" onclick="saveTable()">
+                    <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>保存
+                </button>
             </div>
             <div class="table-background">
                 <table id="resourceTable" class="layui-table" lay-filter="resourceEdit"></table>
@@ -59,55 +67,153 @@
 <script type="text/javascript" src="<%=basePath%>control/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>control/zTree/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/common.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script type="text/javascript"
+        src="<%=basePath%>control/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+<script>
+
+    /**
+     * 表内编辑//https://www.cnblogs.com/songjl/p/7088356.html
+     */
+
+    $(function () {
+        // 初始化表格
+        var oTable = new tableInit();
+        oTable.init();
+    });
+
+
+    var tableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.init = function () {
+            $("#resourceTable").bootstrapTable({
+                url: '<%=basePath%>json/tableJson/produce_json.json',
+                height: $(window).height() - 100,
+                toolbar: '#toolbar',
+                showColumns: true,    //是否显示所有的列
+                showRefresh: true,     //是否显示刷新按钮
+                minimumCountColumns: 2,    //最少显示的列
+                clickToSelect: false,
+                showExport: true,
+                exportDataType: 'all',
+                exportTypes: ['csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'],
+                columns: [
+                    {checkbox: true}
+                    , {field: 'id', title: 'ID', visible: false}
+                    , {field: 'resource', title: '资源'}
+                    , {field: 'date', title: '日期/星期'}
+                    , {field: 'attendanceCode', title: '出勤模式代码'}
+                    , {field: 'priority', title: '优先级'}
+                    , {field: 'resAmount', title: '资源量'}
+                    , {field: 'remark', title: '备注'}
+                    , {field: 'showName', title: '显示名'}
+                    , {field: 'OtherName', title: '别名'}
+                    , {field: 'commonRemark', title: '备注(共通)'}
+                    , {field: 'object', title: '对象'}
+                    , {field: 'objDefine', title: '类定义'}
+                    , {field: 'defaultMarker', title: '不正确标记'}
+                    , {field: 'reasonDefMarker', title: '立不正确标志的理由'}
+                    , {field: 'changeMarkerInside', title: '变更标记(内部)'}
+                    , {field: 'changeMarkerOutside', title: '变更标记(外部)'}
+                    , {field: 'changeDate', title: '更新日期'}
+                    , {field: 'parentObject', title: '父对象'}
+                    , {field: 'subObject', title: '子对象'}
+                    , {field: 'ImportedObject', title: '导入的对象'}
+                    , {field: 'rightInputObjID', title: '右侧输入指令对象ID'}
+                    , {field: 'leftAssociatedObjID', title: '关联对象的左对象ID'}
+                ],
+
+                //编辑时触发
+                onEditableSave: function (field, row, oldValue, $el) {
+                    $("#resourceTable").bootstrapTable("resetView");
+                    $.ajax({
+                        type: "",
+                        url: "",
+                        data: row,
+                        dataType: 'JSON',
+                        success: function (data, status) {
+                            if (status == "success") {
+                                alert('提交数据成功');
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                },
+//                rowStyle: function (row, index) {
+//                    var style = "";
+//                    style = {};
+//                    return {classes: style}
+//                },
+            });
+            $.fn.editable.defaults.mode = 'inline';
+        };
+        return oTableInit;
+    };
+
+    function insertRow() {
+        var timeDiffer = new Date().getTime() - new Date("2018-01-01 00:00:00").getTime();
+        var id = "resource" + timeDiffer;
+        var data = {
+            id: id,
+            resource: "",
+            date: "",
+            attendanceCode: "",
+            priority: "",
+            resAmount: "",
+            remark: "",
+            showName: "",
+            OtherName: "",
+            commonRemark: "",
+            object: "",
+            objDefine: "",
+            defaultMarker: "",
+            reasonDefMarker: "",
+            changeMarkerInside: "",
+            changeMarkerOutside: "",
+            changeDate: "",
+            parentObject: "",
+            subObject: "",
+            ImportedObject: "",
+            rightInputObjID: "",
+            leftAssociatedObjID:""
+        };
+        $("#resourceTable").bootstrapTable('insertRow', {
+            index: $('#resourceTable').bootstrapTable('getData').length,
+            row: data
+        });
+    }
+
+    function saveTable() {
+        var tableData = $('#resourceTable').bootstrapTable('getData');
+        $.ajax({
+            url: "<%=basePath%>"
+            , type: "post"
+            , data: {resourceTable: tableData}
+            , success: function (result) {
+
+            }
+        })
+    }
+
+    function deleteRow() {
+        var ids = $.map($('#resourceTable').bootstrapTable('getSelections'), function (row) {
+            return row.id;
+        });
+        $('#resourceTable').bootstrapTable('remove', {
+            field: 'id',
+            values: ids
+        });
+    }
+
+</script>
 <script type="text/javascript">
-
-    var tableData = [];
-
     layui.use('table', function () {
         var table = layui.table;
 
-        $.ajax({
-            url: '<%=basePath%>json/tableJson/produce_json.json'
-            ,type: "get"
-            ,async: false
-            , success: function(result){
-                tableData = result;
-            }
-        });
-        //第一个实例
-        table.render({
-            elem: '#resourceTable'
-            , height: 'full-100'
-            , cellMinWidth: 120
-            , page: false //开启分页
-            , size: 'sm'
-            , cols: [[ //表头
-                {field: 'id', title: 'ID', align: 'center', fixed: 'left'}
-                , {field: 'resource', title: '资源', edit: 'text', align: 'center'}
-                , {field: 'date', title: '日期/星期', edit: 'text', align: 'center'}
-                , {field: 'attendanceCode', title: '出勤模式代码', align: 'center', edit: 'text'}
-                , {field: 'priority', title: '优先级', align: 'center', edit: 'text'}
-                , {field: 'resAmount', title: '资源量', align: 'center', edit: 'text'}
-                , {field: 'remark', title: '备注', align: 'center', edit: 'text'}
-                , {field: 'showName', title: '显示名', align: 'center', edit: 'text'}
-                , {field: 'OtherName', title: '别名', align: 'center', edit: 'text'}
-                , {field: 'commonRemark', title: '备注(共通)', align: 'center', edit: 'text'}
-                , {field: 'object', title: '对象', align: 'center', edit: 'text'}
-                , {field: 'objDefine', title: '类定义', align: 'center', edit: 'text'}
-                , {field: 'defaultMarker', title: '不正确标记', align: 'center', edit: 'text'}
-                , {field: 'reasonDefMarker', title: '立不正确标志的理由', align: 'center', edit: 'text'}
-                , {field: 'changeMarkerInside', title: '变更标记(内部)', align: 'center', edit: 'text'}
-                , {field: 'changeMarkerOutside', title: '变更标记(外部)', align: 'center', edit: 'text'}
-                , {field: 'changeDate', title: '更新日期', align: 'center', edit: 'text'}
-                , {field: 'parentObject', title: '父对象', align: 'center', edit: 'text'}
-                , {field: 'subObject', title: '子对象', align: 'center', edit: 'text'}
-                , {field: 'ImportedObject', title: '导入的对象', align: 'center', edit: 'text'}
-                , {field: 'rightInputObjID', title: '右侧输入指令对象ID', align: 'center', edit: 'text'}
-                , {field: 'leftAssociatedObjID', title: '关联对象的左对象ID', align: 'center', edit: 'text'}
-            ]]
-            ,data: tableData.data
-            ,limit: tableData.count
-        });
 
         table.render({
             elem: '#propertyTable',
@@ -122,45 +228,6 @@
                 , {field: 'value', title: '值', width: 180}
                 , {field: 'instruction', title: '说明'}
             ]]
-        });
-
-        //监听单元格编辑
-        table.on('edit(resourceEdit)', function (obj) {
-            var value = obj.value //得到修改后的值
-                , data = obj.data //得到所在行所有键值
-                , field = obj.field; //得到字段
-            layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
-        });
-
-        $("#tableAdd").click(function () {
-            var addData  =  table.cache["resourceTable"];
-            var oneData = {"id":1022,
-                "resource":"",
-                "date":"",
-                "attendanceCode":"",
-                "priority":"",
-                "resAmount":"",
-                "remark":"",
-                "showName":"",
-                "OtherName":"",
-                "commonRemark":"",
-                "object":"",
-                "objDefine":"",
-                "defaultMarker":"",
-                "reasonDefMarker":"",
-                "changeMarkerInside":"",
-                "changeMarkerOutside":"",
-                "changeDate":"",
-                "parentObject":"",
-                "subObject":"",
-                "ImportedObject":"",
-                "rightInputObjID":"",
-                "leftAssociatedObjID":""
-            };
-            addData.push(oneData);
-            table.reload("produceTable", {
-                data:addData
-            })
         });
     });
 </script>

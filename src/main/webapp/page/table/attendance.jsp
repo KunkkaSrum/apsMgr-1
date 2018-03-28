@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="<%=basePath%>css/common.css">
     <link rel="stylesheet" href="<%=basePath%>control/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="<%=basePath%>control/zTree/css/zTreeStyle/zTreeStyle.css" type="text/css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="<%=basePath%>control/bootstrap3-editable/css/bootstrap-editable.css">
 </head>
 <body>
 <div class="container-fluid">
@@ -74,49 +76,181 @@
 <script type="text/javascript" src="<%=basePath%>control/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="<%=basePath%>control/zTree/js/jquery.ztree.core.js"></script>
 <script type="text/javascript" src="<%=basePath%>js/common.js"></script>
-<script type="text/javascript">
-    var tableDate = [];
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/bootstrap-table.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/locale/bootstrap-table-zh-CN.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap3-editable/js/bootstrap-editable.min.js"></script>
+<script type="text/javascript" src="<%=basePath%>control/bootstrap-table/extensions/editable/bootstrap-table-editable.js"></script>
+<script>
 
+    /**
+     * 表内编辑//https://www.cnblogs.com/songjl/p/7088356.html
+     */
+
+    $(function () {
+        // 初始化表格
+        var oTable = new tableInit();
+        oTable.init();
+    });
+
+
+    var tableInit = function () {
+        var oTableInit = new Object();
+        //初始化Table
+        oTableInit.init = function () {
+            $("#bomTable").bootstrapTable({
+                url: '<%=basePath%>json/tableJson/bomData.json',
+                height: $(window).height() - 100,
+                toolbar: '#toolbar',
+                showColumns: true,    //是否显示所有的列
+                showRefresh: true,     //是否显示刷新按钮
+                minimumCountColumns: 2,    //最少显示的列
+                clickToSelect: false,
+                showExport: true,
+                exportDataType: 'all',
+                exportTypes:[ 'csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'],
+                columns: [
+                    {checkbox: true}
+                    , {field: "id", title: "id", visible: false}
+                    , {
+                        field: 'items', title: '品目', width:200,  editable: {
+                            type: 'text', title: '品目', validate: function (v) {
+                                if (!v) return '用户名不能为空';
+                            }
+                        },
+                    }
+                    , {
+                        field: 'ProcedureNumber', title: '工序编号',
+                        editable: {
+                            type: 'select',
+                            title: '部门',
+                            source: function () {
+                                var result = [{value: "0", text: "qwe"}];
+                                $.ajax({
+                                    url: '<%=basePath%>json/data_table.json'
+                                    ,async: false
+                                    ,success: function (data) {
+                                        var data = data.data;
+                                        $.each(data, function (key, value) {
+                                            result.push({value: value.id, text: value.auth_group_name})
+                                        });
+                                    }
+                                });
+                                return result;
+                            }
+                        }
+                    }
+                    , {field: 'ProcedureCode', title: '工序代码'}
+                    , {field: 'resources', title: '资源',width:200}
+                    , {field: 'resourcesPriority', title: '资源优先度',width:200}
+                    , {field: 'frontSet', title: '前设置'}
+                    , {field: 'produce', title: '制造'}
+                    , {field: 'backSet', title: '后设置'}
+                    , {field: 'continueMethod', title: '接续方法'}
+                    , {field: 'necessaryResources', title: '必要资源量'}
+                    , {field: 'moveTimeMin', title: '移动时间min'}
+                    , {field: 'moveTimeMax', title: '移动时间max'}
+                    , {field: 'wasteNumber', title: '废品数量'}
+                    , {field: 'yield', title: '成品率'}
+                    , {field: 'produceEffic', title: '制造效率'}
+                    , {field: 'instructionType', title: '指令种类'}
+                    , {field: 'instructionCode', title: '指令代码'}
+                    , {field: 'instructionUseful', title: '指令有效条件'}
+                    , {field: 'workingBatchMin', title: '工作批量min'}
+                    , {field: 'workingBatchMax', title: '工作批量max'}
+                    , {field: 'workingBatchUnit', title: '工作批量单位'}
+                ],
+
+                //编辑时触发
+                onEditableSave: function (field, row, oldValue, $el) {
+                    $("#bomTable").bootstrapTable("resetView");
+                    $.ajax({
+                        type: "",
+                        url: "",
+                        data: row,
+                        dataType: 'JSON',
+                        success: function (data, status) {
+                            if (status == "success") {
+                                alert('提交数据成功');
+                            }
+                        },
+                        error: function () {
+                        }
+                    });
+                },
+//                rowStyle: function (row, index) {
+//                    var style = "";
+//                    style = {};
+//                    return {classes: style}
+//                },
+            });
+            $.fn.editable.defaults.mode = 'inline';
+        };
+        return oTableInit;
+    };
+
+    function insertRow() {
+        var timeDiffer = new Date().getTime() - new Date("2018-01-01 00:00:00").getTime();
+        var id = "bom"+timeDiffer;
+        var data = {
+            id: id,
+            items: "",
+            ProcedureNumber: "",
+            ProcedureCode: "",
+            resources: "",
+            resourcesPriority: "",
+            frontSet: "",
+            produce: "",
+            backSet: "",
+            continueMethod: "",
+            necessaryResources: "",
+            moveTimeMin: "",
+            moveTimeMax: "",
+            wasteNumber:"",
+            yield: "",
+            produceEffic: "",
+            instructionType: "",
+            instructionCode: "",
+            instructionUseful: "",
+            workingBatchMin: "",
+            workingBatchMax: "",
+            workingBatchUnit: ""
+        };
+        $("#bomTable").bootstrapTable('insertRow', {
+            index: $('#bomTable').bootstrapTable('getData').length,
+            row: data
+        });
+    }
+
+    function saveTable() {
+        var tableData = $('#bomTable').bootstrapTable('getData');
+        $.ajax({
+            url: "<%=basePath%>"
+            ,type: "post"
+            ,data: {bomTable: tableData}
+            ,success: function (result) {
+
+            }
+        })
+    }
+
+    function deleteRow() {
+        var ids = $.map($('#bomTable').bootstrapTable('getSelections'),function(row){
+            return row.id;
+        });
+        $('#bomTable').bootstrapTable('remove',{
+            field : 'id',
+            values : ids
+        });
+    }
+
+</script>
+<script type="text/javascript">
     layui.use(['table', 'laydate'], function () {
         var table = layui.table;
-        var laydate = layui.laydate;
-        var layer = layui.layer;
-
-        $.ajax({
-            url: '<%=basePath%>json/tableJson/attendance_json.json'
-            , type: "get"
-            , async: false
-            , success: function (result) {
-                tableDate = result;
-            }
-            , error: function (error) {
-                layui.alert("数据出错：" + error);
-            }
-        });
-
-
-        table.render({
-            elem: '#attendanceTable',
-            height: 'full-100',
-            page: false,
-            size: 'sm',
-            cols: [[ //标题栏
-                {title: '序号', templet: '#indexTpl', align: 'center', width: 100, rowspan: "2"}//rowspan即纵向跨越的单元格数
-                , {align: 'center', title: '出勤模式代码', colspan: '2'}
-                , {field: 'mode', title: '模式', width: 120, align: 'center', edit: 'text', rowspan: "2"}
-                , {field: 'remark', title: '备注', width: 160, align: 'center', edit: 'text', rowspan: "2"}
-                , {fixed: 'right', title: '操作', width: 90, align: 'center', toolbar: '#barTable', rowspan: '2'}
-            ], [
-                {field: 'timeStart', title: '开始时间', align: 'center', edit: 'text'}
-                , {field: 'timeEnd', title: '结束时间', align: 'center', edit: 'text'}
-            ]],
-            data: tableDate.data,
-            limit: tableDate.count
-        });
 
         table.render({
             elem: '#propertyTable',
-            url : '<%=basePath%>json/instruction/ins_attendance.json',
+            url: '<%=basePath%>json/instruction/ins_attendance.json',
             height: 'full-340',
             size: 'sm',
             // skin: 'line',
@@ -128,54 +262,6 @@
                 , {field: 'instruction', title: '说明'}
             ]]
         });
-
-        laydate.render({
-            elem: '#test5'
-            , type: 'time'
-        });
-        laydate.render({
-            elem: '#test6'
-            , type: 'time'
-        });
-
-        //监听工具条
-        table.on('tool(attendanceEdit)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'detail') {
-                layer.msg('ID：' + data.id + ' 的查看操作');
-            } else if (obj.event === 'del') {
-                layer.confirm('真的删除该行数据吗？', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            }
-        });
-
-
-        $("#tableAdd").click(function () {
-            var addData = [];
-            addData = table.cache["attendanceTable"];
-            console.log(table.cache["attendanceTable"]);
-            var oneData = {
-                "id": 1022,
-                "timeStart": "123",
-                "timeEnd": "123",
-                "mode": "123",
-                "remark": "2141"
-            };
-            addData.push(oneData);
-            table.reload("attendanceTable", {
-                data: addData
-            })
-        });
-        //
-        // $("#tableDelete").click(function () {
-        //     var addData  =  table.cache["attendanceTable"];
-        //     addData.remove(addData.length-1);
-        //     table.reload("attendanceTable", {
-        //         data:addData
-        //     })
-        // })
     });
 </script>
 <script type="text/javascript">
@@ -216,6 +302,7 @@
             log.get(0).removeChild(log.children("li")[0]);
         }
     }
+
     //
     // function getTime() {
     //     var now = new Date(),
