@@ -50,8 +50,8 @@
                 <button class="btn btn-primary">导入</button>
                 <button class="btn btn-primary">导出</button>
             </div>
-            <div class="table-background">
-                <table id="attendanceTable" class="layui-table" lay-filter="attendanceEdit"></table>
+            <div class="table-background table-responsive">
+                <table id="attendanceTable" class="table text-nowrap" lay-filter="attendanceEdit"></table>
             </div>
         </div>
     </div>

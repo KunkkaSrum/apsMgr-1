@@ -36,6 +36,16 @@
       "icon": "&#xe628;",
       "href": "",
       "subset": [
+        {
+          "text": "订单甘特图",
+          "icon": "&#xe60a;",
+          "href": "page/gantt/orderGantt.jsp"
+        },
+        {
+          "text": "资源甘特图",
+          "icon": "&#xe629;",
+          "href": "page/gantt/resourcesGantt"
+        }
       ]
     },
     {
